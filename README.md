@@ -20,13 +20,13 @@
 
 ## ▸ Overview
 
-Desenvolvedor focado na construção de soluções que conectam software e hardware. Especializado em sistemas embarcados com interfaces gráficas, connectivity em tempo real via MQTT e WebSockets, e edge AI com machine learning.
+Desenvolvedor especializado em sistemas embarcados e IoT. Experiência em firmware para microcontroladores, interfaces gráficas em tempo real, conectividade MQTT/WebSockets e machine learning em edge.
 
 | | |
 | :--- | :--- |
-| **Embedded Systems** | LVGL UI, RTOS (FreeRTOS), displays AMOLED/TFT |
-| **Real-Time Connectivity** | MQTT Pub/Sub, WebSockets, REST APIs, OTA Updates |
-| **Edge AI** | TensorFlow Lite, Computer Vision (OpenCV) |
+| **Embedded** | LVGL UI, FreeRTOS, displays AMOLED/TFT |
+| **Connectivity** | MQTT, WebSockets, REST APIs, OTA Updates |
+| **Machine Learning** | TensorFlow Lite, OpenCV |
 
 <br />
 
@@ -36,28 +36,28 @@ Desenvolvedor focado na construção de soluções que conectam software e hardw
 
 | | |
 | :--- | :--- |
-| **Autonomous Navigation** | Self-driving systems com trajectory detection |
-| **Edge ML Inference** | Machine learning models compiled para microcontrollers |
+| **Autonomous Navigation** | Self-driving systems, trajectory detection |
+| **ML Inference** | TensorFlow Lite em microcontroladores |
 
 ### ◆ IoT & Embedded Systems
 
 | | |
 | :--- | :--- |
-| **Smart Wearables** | Touchscreen devices com integrated sensors |
-| **Real-Time Monitoring** | Data collection systems com continuous analysis e dashboards |
-| **Signal Processing** | Multidimensional signal manipulation em tempo real |
-| **Firmware Distribution** | Secure remote update systems para devices |
-| **Media Streaming** | Real-time video transmission via HTTP protocol |
-| **Embedded Templates** | Optimized boilerplates para rapid prototyping |
+| **Wearables** | Touchscreen devices com sensores integrados |
+| **Monitoring** | Coleta de dados, análise e dashboards |
+| **Signal Processing** | Processamento de sinais em tempo real |
+| **OTA Updates** | Atualização remota segura de firmware |
+| **Streaming** | Transmissão de vídeo via HTTP |
+| **Boilerplates** | Templates otimizados para prototipagem |
 
 ### ► Full-Stack & Backend
 
 | | |
 | :--- | :--- |
-| **Modern Web Interfaces** | Responsive SPAs com real-time synchronization |
-| **High-Performance APIs** | Optimized REST services com advanced web scraping |
-| **Bidirectional Communication** | WebSockets para instant updates |
-| **Cross-Platform Apps** | Desktop e mobile applications com data sync |
+| **Web Interfaces** | SPAs responsivas com sincronização em tempo real |
+| **APIs** | REST services, web scraping |
+| **Real-Time Communication** | WebSockets para atualizações instantâneas |
+| **Cross-Platform** | Aplicações desktop e mobile com sincronização |
 
 <br />
 
