@@ -14,12 +14,11 @@
   </a>
 
   <br />
-  <img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0D1117&height=1" />
 </div>
 
 <br />
 
-## 🛠 Overview
+## ▸ Overview
 
 Desenvolvedor focado na construção de soluções que conectam software e hardware. Especializado em sistemas embarcados com interfaces gráficas, connectivity em tempo real via MQTT e WebSockets, e edge AI com machine learning.
 
@@ -31,7 +30,38 @@ Desenvolvedor focado na construção de soluções que conectam software e hardw
 
 <br />
 
-## 🧬 Tech Stack
+## Core Competencies
+
+### ◇ Robotics & Computer Vision
+
+| | |
+| :--- | :--- |
+| **Autonomous Navigation** | Self-driving systems com trajectory detection |
+| **Edge ML Inference** | Machine learning models compiled para microcontrollers |
+
+### ◆ IoT & Embedded Systems
+
+| | |
+| :--- | :--- |
+| **Smart Wearables** | Touchscreen devices com integrated sensors |
+| **Real-Time Monitoring** | Data collection systems com continuous analysis e dashboards |
+| **Signal Processing** | Multidimensional signal manipulation em tempo real |
+| **Firmware Distribution** | Secure remote update systems para devices |
+| **Media Streaming** | Real-time video transmission via HTTP protocol |
+| **Embedded Templates** | Optimized boilerplates para rapid prototyping |
+
+### ► Full-Stack & Backend
+
+| | |
+| :--- | :--- |
+| **Modern Web Interfaces** | Responsive SPAs com real-time synchronization |
+| **High-Performance APIs** | Optimized REST services com advanced web scraping |
+| **Bidirectional Communication** | WebSockets para instant updates |
+| **Cross-Platform Apps** | Desktop e mobile applications com data sync |
+
+<br />
+
+## ◆ Tech Stack
 
 <div align="center">
 
@@ -68,38 +98,7 @@ Desenvolvedor focado na construção de soluções que conectam software e hardw
 
 <br />
 
-## 📂 Core Competencies
-
-### 🤖 Robotics & Computer Vision
-
-| | |
-| :--- | :--- |
-| **Autonomous Navigation** | Self-driving systems com trajectory detection |
-| **Edge ML Inference** | Machine learning models compiled para microcontrollers |
-
-### 📡 IoT & Embedded Systems
-
-| | |
-| :--- | :--- |
-| **Smart Wearables** | Touchscreen devices com integrated sensors |
-| **Real-Time Monitoring** | Data collection systems com continuous analysis e dashboards |
-| **Signal Processing** | Multidimensional signal manipulation em tempo real |
-| **Firmware Distribution** | Secure remote update systems para devices |
-| **Media Streaming** | Real-time video transmission via HTTP protocol |
-| **Embedded Templates** | Optimized boilerplates para rapid prototyping |
-
-### 🌐 Full-Stack & Backend
-
-| | |
-| :--- | :--- |
-| **Modern Web Interfaces** | Responsive SPAs com real-time synchronization |
-| **High-Performance APIs** | Optimized REST services com advanced web scraping |
-| **Bidirectional Communication** | WebSockets para instant updates |
-| **Cross-Platform Apps** | Desktop e mobile applications com data sync |
-
-<br />
-
-## 📊 Statistics
+## ╔ Statistics
 
 <div align="center">
   <a href="https://next.ossinsight.io/widgets/official/compose-user-dashboard-stats?user_id=45330928">
