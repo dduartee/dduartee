@@ -9,5 +9,5 @@
 ![mainframe lamp console](mainframe-lamp-console/mainframe-lamp-console.svg)
 ![simple circuit current](simple-circuit-current/simple-circuit-current.svg)
 ![rc low-pass filter](rc-filter/rc-filter.svg)
-![rc pulse response](rc-pulse/rc-pulse.svg)
+![rc pulse response](rc-pulse/rc-pulse.svg?v=2)
 ![nitrogen cycle](nitrogen-cycle/nitrogen-cycle.svg)

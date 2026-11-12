@@ -39,6 +39,13 @@ def vo(t):
     return 4 * (1 - math.exp(-0.3 / TAU)) * math.exp(-(t - 0.3) / TAU)
 
 
+def vc(t):
+    """Tensao no capacitor: carga ate 6 V com a fonte em 9 V, descarga depois."""
+    if t < 0.3:
+        return 6 * (1 - math.exp(-t / TAU))
+    return 6 * (1 - math.exp(-0.3 / TAU)) * math.exp(-(t - 0.3) / TAU)
+
+
 def make_frame(ph):
     g = [[None] * COLS for _ in range(ROWS)]
 
@@ -55,6 +62,11 @@ def make_frame(ph):
             n = fbm(x * 0.1, y * 0.25)
             ch = "+" if (x + y * 3) % 7 == 0 else ("▒" if n > 0.6 else "░")
             put(x, y, ch, BG[min(3, int(n * 4))])
+
+    # estado da simulacao neste frame: fonte ligada (9 V) ate 0,3 s
+    t_sim = T_END * min(1.0, ph / DRAW)
+    on = t_sim < 0.3
+    vct = vc(t_sim)
 
     # --- circuito ---
     for x in range(L, END):
@@ -74,8 +86,8 @@ def make_frame(ph):
     # resistores (8 celulas) e o de 8k vertical
     text(10, T, "┤╱╲╱╲╱├", RES)
     text(24, T, "┤╱╲╱╲╱├", RES)
-    text(11, T - 1, "6 kΩ", UI1)
-    text(25, T - 1, "4 kΩ", UI1)
+    text(11, T + 1, "6 kΩ", UI1)
+    text(25, T + 1, "4 kΩ", UI1)
     for i, y in enumerate(range(12, 16)):
         put(RB, y, "╲" if i % 2 == 0 else "╱", RES)
     text(RB + 5, 13, "8 kΩ", UI1)
@@ -84,16 +96,20 @@ def make_frame(ph):
         put(x, 12, "━", CAP)
         put(x, 14, "━", CAP)
     put(CAPX, 13, " ", CAP)
-    text(CAPX - 7, 11, "v_C(t)", UI0)
+    # eletrons armazenados na placa de baixo (cresce com v_C, drena na descarga)
+    for i in range(round(vct / 6 * 5)):
+        put(CAPX - 2 + i, 14, "●", EL[1])
+    text(8, 13, f"v_C={vct:.2f}V".replace(".", ","), CAP)
     text(CAPX - 7, 15, "100 µF", UI1)
-    # bateria v(t)
-    text(L - 3, 11, "━━━━━━━", BAT1)
-    text(L - 1, 12, "━━━", BAT2)
-    text(L - 3, 14, "━━━━━━━", BAT1)
-    text(L - 1, 15, "━━━", BAT2)
-    text(L + 5, 11, "+", BAT1)
-    text(L + 5, 15, "-", BAT2)
-    text(0, 13, "v(t)", UI0)
+    # bateria v(t): apagada quando a fonte esta em 0 V (pulso terminou)
+    b1, b2 = (BAT1, BAT2) if on else (UI1, UI1)
+    text(L - 3, 11, "━━━━━━━", b1)
+    text(L - 1, 12, "━━━", b2)
+    text(L - 3, 14, "━━━━━━━", b1)
+    text(L - 1, 15, "━━━", b2)
+    text(L + 5, 11, "+", b1)
+    text(L + 5, 15, "-", b2)
+    text(0, 5, f"v(t) = {9.0 if on else 0.0:.1f} V".replace(".", ","), b1)
 
     # --- plot ---
     put(AX, AY, "└", UI1)
@@ -116,8 +132,7 @@ def make_frame(ph):
         put(C03, y, "┆", UI1)         # guia t = 0,3 s
     put(C03, 10, "●", UI3)
 
-    # tempo de simulacao: desenha em DRAW s de parede, depois segura
-    t_sim = T_END * min(1.0, ph / DRAW)
+    # tempo de simulacao ja calculado acima; desenha a curva ate t_sim
     prev_v = 0.0
     for c in range(X1 - X0 + 1):
         t = c / (X1 - X0) * T_END
@@ -151,11 +166,11 @@ def make_frame(ph):
     text(1, 28, "the capacitor smooths the output; electron drift is really under a millimetre per second", UI1)
     text(1, 0, "RC LOW-PASS: PULSE RESPONSE (EX. 7.7)", UI0)
 
-    # eletrons e setas no laco
+    # eletrons e setas no laco; sentidos invertem na descarga (fonte em 0 V)
     path = ([(x, T) for x in range(L, RB)] + [(RB, y) for y in range(T, B)]
             + [(x, B) for x in range(RB, L, -1)] + [(L, y) for y in range(B, T, -1)])
     n = len(path)
-    drift = ph * 8
+    drift = ph * 8 * (1 if on else -1)
     for k in range(0, n, 4):
         x, y = path[int(((n - 1 - k - drift) % n + n) % n)]
         if g[y][x] and g[y][x][0] in ("━", "┃"):
@@ -163,11 +178,17 @@ def make_frame(ph):
     for k in range(6):
         i = int(((k / 6 + ph / LOOP) % 1) * n)
         x, y = path[i]
-        nx, ny = path[(i + 1) % n]
+        nx, ny = path[(i + 1) % n if on else (i - 1) % n]  # corrente convencional inverte
         ch = "→" if nx > x else "←" if nx < x else "↓" if ny > y else "↑"
         ox = -2 if x == L else 2 if x == RB else 0
         oy = -1 if y == T else 1 if y == B else 0
         put(x + ox, y + oy, ch, CUR)
+    # eletrons no ramo do capacitor: sobem na carga, descem na descarga
+    branch = [16, 15, 11, 10, 9, 8]   # baixo -> cima, fora das placas
+    sgn = 1 if on else -1
+    for j in range(2):
+        idx = int((j * len(branch) / 2 + ph * 4 * sgn) % len(branch))
+        put(CAPX, branch[idx], "●", EL[0])
     return g
 
 
