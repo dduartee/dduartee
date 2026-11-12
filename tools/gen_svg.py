@@ -167,21 +167,29 @@ def build(sel, path, loop):
     W = round(cols * ADV + 2 * PAD_X)
     H = round(rows * LH + 2 * PAD_Y)
     step = loop / len(sel)
+    # classes de cor: <tspan class="cN"> encurta cada run colorido
+    fill_ids = {}
     texts = []
     for i, (fr, _) in enumerate(sel):
         tsp = []
         for r, runs in enumerate(fr):
             y = round(PAD_Y + FS * 0.85 + r * LH)
-            body = "".join(
-                f'<tspan fill="{fg}">{esc(t)}</tspan>' if fg else f"<tspan>{esc(t)}</tspan>"
-                for t, fg in merge_runs(runs))
+            body = ""
+            for t, fg in merge_runs(runs):
+                if fg:
+                    cid = fill_ids.setdefault(fg, f"c{len(fill_ids)}")
+                    body += f'<tspan class="{cid}">{esc(t)}</tspan>'
+                else:
+                    body += f"<tspan>{esc(t)}</tspan>"
             tsp.append(f'<text x="{PAD_X}" y="{y}">{body}</text>')
         texts.append(
             f'<g class="f" style="animation-delay:{round(i * step, 4)}s">{"".join(tsp)}</g>')
+    css_fills = " ".join(f".{cid}{{fill:{fg}}}" for fg, cid in fill_ids.items())
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" aria-labelledby="t">
 <title id="t">{esc(path)} - ASCII Magic animation</title>
 <style>
 text{{font:{FS}px Menlo,Consolas,"DejaVu Sans Mono","Liberation Mono",monospace;fill:{FG};white-space:pre}}
+{css_fills}
 .f{{opacity:0;animation:swap {round(loop, 2)}s steps(1,end) infinite}}
 @keyframes swap{{0%{{opacity:1}}{round(100 / len(sel), 2)}%{{opacity:0}}100%{{opacity:0}}}}
 @media (prefers-reduced-motion:reduce){{.f{{animation:none}}.f:first-of-type{{opacity:1}}}}
@@ -202,6 +210,8 @@ def main():
     ap.add_argument("--look", default=None, help="quando a peca tiver looks: lines | dots | block")
     ap.add_argument("--out", default=None, help="arquivo de saida (default: <piece>.svg)")
     ap.add_argument("--seconds", type=int, default=3, help="duracao da captura (default: 3)")
+    ap.add_argument("--max-frames", type=int, default=MAX_FRAMES,
+                    help="teto de frames no SVG (0 = sem teto; default: 120)")
     a = ap.parse_args()
     out = a.out or f"{a.piece}.svg"
     uniq = frames(capture(a.piece, a.look, a.seconds))
@@ -211,8 +221,8 @@ def main():
     if period:
         n, diff = period
         sel, loop = uniq[:n], a.seconds * n / len(uniq)  # periodo em segundos reais
-        if len(sel) > MAX_FRAMES:  # amarra o tamanho do arquivo
-            k = [min(len(sel) - 1, round(i * (len(sel) - 1) / (MAX_FRAMES - 1))) for i in range(MAX_FRAMES)]
+        if a.max_frames and len(sel) > a.max_frames:  # amarra o tamanho do arquivo
+            k = [min(len(sel) - 1, round(i * (len(sel) - 1) / (a.max_frames - 1))) for i in range(a.max_frames)]
             sel = [sel[i] for i in k]
     else:
         sel, loop = uniq, float(a.seconds)
