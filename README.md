@@ -6,5 +6,5 @@
 ![phosphor scope xy](phosphor-scope/phosphor-scope.svg?v=3)
 ![sql query runner](sql-query/sql-query.svg?v=2)
 ![double pendulum](double-pendulum/double-pendulum.svg)
-![circuit trace](circuit-trace/circuit-trace.svg)
+![mainframe lamp console](mainframe-lamp-console/mainframe-lamp-console.svg)
 ![nitrogen cycle](nitrogen-cycle/nitrogen-cycle.svg)
