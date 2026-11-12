@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """ascii-magic piece -> SVG animado colorido (frames em <text>, troca via CSS steps).
 
-Uso:
-  python3 tools/gen_svg.py rotating-cube --look=lines --out=cube.svg
-  python3 tools/gen_svg.py snake-autoplay --out=snake.svg
+Uso (convencao: cada peca mora em <piece>/<piece>.svg, com README.md junto
+para visualizacao individual no GitHub — o default do --out ja faz isso):
+  python3 tools/gen_svg.py rotating-cube --look=lines
+  python3 tools/gen_svg.py snake-autoplay
 
 Ao sobrescrever um SVG ja referenciado no README, suba o ?v=N na referencia
 (nova URL = cache novo). Arquivo novo nao precisa.
@@ -17,6 +18,7 @@ import argparse
 import re
 import subprocess
 import xml.dom.minidom as minidom
+from pathlib import Path
 
 ESC = "\x1b"
 FS, ADV, LH = 13, 7.8, 15.6
@@ -146,11 +148,11 @@ def ndiff(a, b):
                != (b[r][c] if r < len(b) and c < len(b[r]) else " "))
 
 
-def one_period(chars_list):
+def one_period(chars_list, min_j=12):
     if len(chars_list) < 16:
         return None
     filled = sum(1 for l in chars_list[0] for ch in l if ch != " ")
-    best = min((ndiff(chars_list[0], chars_list[j]), j) for j in range(12, len(chars_list)))
+    best = min((ndiff(chars_list[0], chars_list[j]), j) for j in range(min_j, len(chars_list)))
     if best[0] <= 0.25 * filled:
         return best[1], best[0]
     return None
@@ -199,6 +201,11 @@ text{{font:{FS}px Menlo,Consolas,"DejaVu Sans Mono","Liberation Mono",monospace;
 </svg>
 '''
     open(path, "w", encoding="utf-8").write(svg)
+    # README da pasta: visualizacao individual no GitHub
+    rmd = Path(path).parent / "README.md"
+    if not rmd.exists():
+        stem = Path(path).stem
+        rmd.write_text(f"# {stem}\n\n![{stem}]({Path(path).name})\n", encoding="utf-8")
     n = len(minidom.parse(path).getElementsByTagName("g"))
     assert n == len(sel), f"self-check: {n} g != {len(sel)} frames"
     print(f"{path}: {len(sel)} frames, loop {round(loop, 2)}s, {rows}x{cols} chars, {W}x{H}px")
@@ -214,12 +221,16 @@ def main():
                     help="teto de frames no SVG (0 = sem teto; default: 120)")
     ap.add_argument("--no-cycle", action="store_true",
                     help="pula a deteccao de ciclo (pecas caoticas); loop = captura inteira")
+    ap.add_argument("--min-cycle", type=float, default=0,
+                    help="ciclo minimo em segundos (descarta periodos curtos demais)")
     a = ap.parse_args()
-    out = a.out or f"{a.piece}.svg"
+    out = a.out or f"{a.piece}/{a.piece}.svg"
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
     uniq = frames(capture(a.piece, a.look, a.seconds))
     if len(uniq) < 2:
         raise SystemExit(f"poucos frames capturados ({len(uniq)}); rode de novo")
-    period = None if a.no_cycle else one_period([c for _, c in uniq])
+    min_j = max(12, round(a.min_cycle * len(uniq) / a.seconds))
+    period = None if a.no_cycle else one_period([c for _, c in uniq], min_j)
     if period:
         n, diff = period
         sel, loop = uniq[:n], a.seconds * n / len(uniq)  # periodo em segundos reais
