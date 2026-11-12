@@ -7,4 +7,5 @@
 ![sql query runner](sql-query/sql-query.svg?v=2)
 ![double pendulum](double-pendulum/double-pendulum.svg)
 ![mainframe lamp console](mainframe-lamp-console/mainframe-lamp-console.svg)
+![simple circuit current](simple-circuit-current/simple-circuit-current.svg)
 ![nitrogen cycle](nitrogen-cycle/nitrogen-cycle.svg)
