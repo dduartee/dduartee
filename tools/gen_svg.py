@@ -212,12 +212,14 @@ def main():
     ap.add_argument("--seconds", type=int, default=3, help="duracao da captura (default: 3)")
     ap.add_argument("--max-frames", type=int, default=MAX_FRAMES,
                     help="teto de frames no SVG (0 = sem teto; default: 120)")
+    ap.add_argument("--no-cycle", action="store_true",
+                    help="pula a deteccao de ciclo (pecas caoticas); loop = captura inteira")
     a = ap.parse_args()
     out = a.out or f"{a.piece}.svg"
     uniq = frames(capture(a.piece, a.look, a.seconds))
     if len(uniq) < 2:
         raise SystemExit(f"poucos frames capturados ({len(uniq)}); rode de novo")
-    period = one_period([c for _, c in uniq])
+    period = None if a.no_cycle else one_period([c for _, c in uniq])
     if period:
         n, diff = period
         sel, loop = uniq[:n], a.seconds * n / len(uniq)  # periodo em segundos reais
@@ -226,7 +228,8 @@ def main():
             sel = [sel[i] for i in k]
     else:
         sel, loop = uniq, float(a.seconds)
-        print(f"aviso: ciclo nao detectado; loop pode dar salto ({len(uniq)} frames)")
+        if not a.no_cycle:
+            print(f"aviso: ciclo nao detectado; loop pode dar salto ({len(uniq)} frames)")
     build(sel, out, loop)
 
 
