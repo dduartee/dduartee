@@ -8,4 +8,5 @@
 ![double pendulum](double-pendulum/double-pendulum.svg)
 ![mainframe lamp console](mainframe-lamp-console/mainframe-lamp-console.svg)
 ![simple circuit current](simple-circuit-current/simple-circuit-current.svg)
+![rc filter](rc-filter/rc-filter.svg)
 ![nitrogen cycle](nitrogen-cycle/nitrogen-cycle.svg)
