@@ -1,3 +1,3 @@
 # dduartee
 
-![double pendulum](double-pendulum/double-pendulum.svg?v=2)
+![double pendulum](double-pendulum/double-pendulum.svg?v=3)
